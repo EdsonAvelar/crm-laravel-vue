@@ -604,15 +604,11 @@ class DashboardController extends Controller
                 $count = Agendamento::where($query)->count();
                 array_push($output['agendados_amanha'], $count);
 
-
-
                 $query = [
                     ['data_reuniao', '>=', $from],
                     ['data_reuniao', '<=', $to],
                     ['user_id', '=', $vendedor->id]
                 ];
-
-
 
                 $count = Reuniao::where($query)->count();
                 array_push($output['reunioes'], $count);

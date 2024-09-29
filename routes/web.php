@@ -43,6 +43,8 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('/configuracoes/producao/index', [ProductionController::class, 'index'])->name('productions.index');
+    Route::delete('/configuracoes/producao/delete/{id}', [ProductionController::class, 'destroy'])->name('productions.delete');
+    Route::put('/configuracoes/producao/update/{id}', [ProductionController::class, 'update'])->name('productions.update');
 
     //Route::get('/configuracoes/producao/index', [ProductionController::class, 'index'])->name('productions.index');
     Route::post('/configuracoes/producao/store', [ProductionController::class, 'store'])->name('productions.store');

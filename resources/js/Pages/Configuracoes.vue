@@ -60,9 +60,9 @@
                                 x 512px (PNG)</span></label>
 
 
-                        <Image f_width="512" f_height="512" :aspectRatio="1" destination="logos"
+                        <CustomImage f_width="512" f_height="512" :aspectRatio="1" destination="logos"
                             name="empresa_logo_circular.png" route="empresa_images" width="100"
-                            customclass='rounded-full ' source="images/empresa/logos/empresa_logo_circular.png" />
+                            customclass='rounded-full ' source="/images/empresa/logos/empresa_logo_circular.png" />
 
                     </div>
 
@@ -71,9 +71,9 @@
                                 class="flex text-sm text-slate-400">512px
                                 x 256px (PNG)</span></label>
 
-                        <Image f_width="512" f_height="256" destination="logos" name="empresa_logo_circular.png"
+                        <CustomImage f_width="512" f_height="256" destination="logos" name="empresa_logo_circular.png"
                             route="empresa_images" width="150" height="50" customclass='rectangle-full'
-                            source="images/empresa/logos/empresa_logo_transparente.png" />
+                            source="/images/empresa/logos/empresa_logo_transparente.png" />
 
                     </div>
 
@@ -84,9 +84,9 @@
                                 class="flex text-sm text-slate-400">512px
                                 x 128px (PNG)</span></label>
 
-                        <Image f_width="512" f_height="128" destination="logos" name="empresa_logo_circular.png"
+                        <CustomImage f_width="512" f_height="128" destination="logos" name="empresa_logo_circular.png"
                             route="empresa_images" width="150" height="50" customclass='rectangle-full'
-                            source="images/empresa/logos/empresa_logo_horizontal.png" />
+                            source="/images/empresa/logos/empresa_logo_horizontal.png" />
 
                     </div>
 
@@ -97,9 +97,9 @@
                                 class="flex text-sm text-slate-400">512px
                                 x 256px (PNG)</span></label>
 
-                        <Image f_width="1000" f_height="1000" destination="logos" name="empresa_logo_circular.png"
+                        <CustomImage f_width="1000" f_height="1000" destination="logos" name="empresa_logo_circular.png"
                             route="empresa_images" width="150" height="150" customclass='rectangle-full'
-                            source="images/empresa/logos/empresa_logo_transparente.png" />
+                            source="/images/empresa/logos/empresa_logo_transparente.png" />
 
                     </div>
 
@@ -150,15 +150,20 @@
                 ]" /> -->
 
                 <CustomTable routeName="productions.index" dataName="productions" :columns="[
+                    { label: 'Active', field: 'active' },
                     { label: 'Name', field: 'name' },
                     { label: 'Inicio', field: 'start_date', format: (date) => new Date(date).toLocaleDateString() },
                     { label: 'Fim', field: 'end_date', format: (date) => new Date(date).toLocaleDateString() },
 
-                ]" />
+                ]">
 
+                    <!-- Modal fornecido via slot -->
+                    <template #default="{ showModal, closeModal, item, success }">
+                        <MyModal :show="showModal" @close="closeModal" :item="item" @success="success" />
+                    </template>
 
+                </CustomTable>
             </section>
-
 
             <!-- Seção de Configurações de Marketing -->
             <section v-if="activeSection === 'marketing'" class="bg-white shadow-lg rounded-lg p-6">
@@ -167,7 +172,6 @@
                 <p>Aqui irão as configurações de Marketing...</p>
             </section>
         </main>
-
 
         <ImageCropper ref="imageCropper" />
     </div>
@@ -178,14 +182,22 @@
 <script setup>
 import { ref } from 'vue';
 import ImageCropper from '../Pages/Components/ImageCropper.vue';
-import Image from './Components/CustomImage.vue';
+import CustomImage from './Components/CustomImage.vue';
 import Producao from '../Pages/Components/Production.vue';
 
 import CustomTable from '../Pages/Components/CustomTable.vue';
 
+import MyModal from './Components/ProductionModal.vue';
+
+const fetchData = ref(null); // Ref para armazenar a função de atualizar dados
+
+// Função para capturar a função fetchData do CustomTable
+const captureFetchData = (fn) => {
+    fetchData.value = fn;
+};
+
 
 const imageCropper = ref(null); // Referência ao componente
-
 
 // Função para abrir o modal de corte de imagem
 const openCropperModal = () => {

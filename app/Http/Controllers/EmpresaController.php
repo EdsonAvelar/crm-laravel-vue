@@ -93,11 +93,9 @@ class EmpresaController extends Controller
         $destino = $input['destination'];
         $imagem_name = $input['name'];
 
-
-    
+        $destino = public_path('') . $destino;
 
         $request->image->move($destino, $imagem_name);
-
 
         //return back()->with("status", "Imagem salva com sucesso");
         #return redirect()->route('empresa_images', ['_t' => time(), "status" => "Imagem salva com sucesso" ]);
